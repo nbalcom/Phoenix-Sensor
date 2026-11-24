@@ -1,22 +1,15 @@
-<?php 
-if (!defined('ABSPATH')) exit; 
-
-// Pull versioning from the main plugin file
-$plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/phoenix-sensor/phoenix-sensor.php');
-$current_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '1.0.0';
-?>
-
-<div class="px-header-main">
-    <div class="px-title-stack">
-        <h1>PHOENIX SENSOR <span class="px-version-tag">v<?php echo esc_html($current_version); ?></span></h1>
-        <p class="px-motto-top px-subtitle-fix">Apex Agent Report</p>
+<?php if (!defined('ABSPATH')) exit; ?>
+<div class="px-header">
+    <div>
+        <h1>Phoenix Sensor <span style="font-size: 0.75rem; background: #1e293b; padding: 3px 8px; border-radius: 6px; color: #94a3b8; border: 1px solid #334155;">V15.0 | 30-Day Rolling</span></h1>
+        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">Modular AEO Intelligence, Live Citation Telemetry &amp; Handshake Verification</div>
     </div>
-
-    <div class="px-branding-right">
-        <div class="px-branding-motto">
-            <span class="px-motto-top">Rising From The Ashes</span>
-            <span class="px-motto-bottom">Bird Brain Initiative</span>
-        </div>
-        <img src="../wp-content/plugins/phoenix-sensor/images/phoenix-sensor-emblem.webp" class="px-phoenix-logo" alt="Phoenix Emblem">
+    <div class="px-header-actions">
+        <button type="button" id="px-copy-sitrep-btn" class="px-btn px-btn-secondary">
+            Copy 30-Day Sit-Rep
+        </button>
+        <a href="<?php echo esc_url($v14_url); ?>" class="px-btn px-btn-primary">
+            Export Master CSV
+        </a>
     </div>
 </div>

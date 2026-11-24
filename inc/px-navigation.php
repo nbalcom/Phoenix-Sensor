@@ -1,41 +1,81 @@
 <?php if (!defined('ABSPATH')) exit; ?>
+<div class="px-filter-bar">
+    <div class="px-filter-group">
+        <span style="font-size: 0.8rem; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">
+            Live Feed (30d)
+        </span>
+        <select id="px-filter-action" class="px-select">
+            <option value="">All Intents / Actions</option>
+            <option value="Live Citation Fetch">Live Citation Fetch</option>
+            <option value="AI Search Indexing">AI Search Indexing</option>
+            <option value="Model Training">Model Training</option>
+            <option value="AI Referral Click">AI Referral Click</option>
+            <option value="Search Indexing">Traditional Search</option>
+            <option value="Pageview">Human Pageview</option>
+        </select>
 
-<div class="px-nav-container">
-    <button class="px-nav-btn active" onclick="pxVibe('all', this)">ðŸš€ All Nodes</button>
-    <button class="px-nav-btn" onclick="pxVibe('ai', this)">ðŸ¤– AI Agents</button>
-    <button class="px-nav-btn" onclick="pxVibe('user', this)">ðŸ§  End Users</button>
-    <button class="px-nav-btn" onclick="pxVibe('ghost', this)">ðŸ‘» Ghost Hits</button>
-    
-    <div style="flex-grow: 1;"></div>
+        <select id="px-filter-handshake" class="px-select">
+            <option value="">All Handshakes</option>
+            <option value="Verified Bot">Verified Bot</option>
+            <option value="Spoofed Bot">Spoofed Bot</option>
+            <option value="High Friction">High Friction</option>
+            <option value="Unverified Bot">Unverified Bot</option>
+            <option value="Active">Active (Human)</option>
+        </select>
 
-<a href="<?php echo site_url('/data-bridge-alpha.php?v=' . time()); ?>" class="px-csv-link">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
-    </svg>
-    CSV DOWNLOAD REPORT | 🕙 <?php echo date('g:i A'); ?>
-</a>
+        <select id="px-filter-pillar" class="px-select">
+            <option value="">All Pillar Nodes</option>
+            <option value="Home">Home</option>
+            <option value="AEO & AI Systems">AEO &amp; AI Systems</option>
+            <option value="UX Architecture">UX Architecture</option>
+            <option value="WordPress & Perf">WordPress &amp; Perf</option>
+            <option value="Legacy Design">Legacy Design</option>
+            <option value="LLMs.txt Manifest">LLMs.txt Manifest</option>
+        </select>
+    </div>
+
+    <div class="px-filter-group">
+        <button type="button" id="px-purge-btn" class="px-btn px-btn-danger">
+            Purge Logs
+        </button>
+        <a href="<?php echo esc_url(admin_url('admin.php?page=phoenix-sensor')); ?>" class="px-btn px-btn-secondary">
+            Refresh
+        </a>
+    </div>
 </div>
 
-<form id="px-csv-form" method="post" action="<?php echo admin_url('admin-post.php'); ?>" style="display:none;">
-    <input type="hidden" name="action" value="px_export_csv">
-    <?php wp_nonce_field('px_csv_export_nonce', 'px_csv_nonce'); ?>
-</form>
-
 <script>
-function pxVibe(vibeType, btn) {
-    document.querySelectorAll('.px-nav-btn').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    const tableBody = jQuery('.px-tbl-wrap tbody'); 
-    if (tableBody.length) {
-        tableBody.css('opacity', '0.4');
-        jQuery.post(ajaxurl, { action: 'px_filter_table', vibe: vibeType }, function(response) {
-            tableBody.html(response).css('opacity', '1');
+(function() {
+    const actionSel    = document.getElementById('px-filter-action');
+    const handshakeSel = document.getElementById('px-filter-handshake');
+    const pillarSel    = document.getElementById('px-filter-pillar');
+
+    function applyTableFilters() {
+        const aVal = actionSel.value;
+        const hVal = handshakeSel.value;
+        const pVal = pillarSel.value;
+
+        document.querySelectorAll('#px-telemetry-table tbody tr[data-action]').forEach(row => {
+            const matchA = !aVal || row.dataset.action === aVal;
+            const matchH = !hVal || row.dataset.handshake === hVal;
+            const matchP = !pVal || row.dataset.pillar === pVal;
+            row.style.display = (matchA && matchH && matchP) ? '' : 'none';
         });
     }
-}
-function pxDownloadCSV() {
-    document.getElementById('px-csv-form').submit();
-}
+
+    actionSel?.addEventListener('change', applyTableFilters);
+    handshakeSel?.addEventListener('change', applyTableFilters);
+    pillarSel?.addEventListener('change', applyTableFilters);
+
+    document.getElementById('px-purge-btn')?.addEventListener('click', function() {
+        if (!confirm('Purge all raw telemetry logs? (Daily rollup history will be preserved.)')) return;
+        const data = new URLSearchParams({
+            action: 'px_purge_logs',
+            nonce: '<?php echo esc_js(wp_create_nonce('px_sensor_nonce')); ?>'
+        });
+        fetch(ajaxurl, { method: 'POST', body: data })
+            .then(r => r.json())
+            .then(res => { if (res.success) location.reload(); });
+    });
+})();
 </script>

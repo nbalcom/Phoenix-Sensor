@@ -1,78 +1,64 @@
-<?php if (!defined('ABSPATH')) exit; ?>
-<style id="px-omnipresent-styles">
-    :root {
-        --px-bg: #111926;
-        --px-blue: #3b82f6;
-        --px-card: rgba(30, 41, 59, 0.4);
-        --px-border: rgba(255, 255, 255, 0.05);
-        --px-text: #ffffff;
-        --px-muted: #64748b;
-        --px-grid-cols: 1fr;
-    }
+<style>
+/* FORCE #0b1421 BACKGROUND ON WORDPRESS ADMIN CANVAS */
+body.toplevel_page_phoenix-sensor,
+body.toplevel_page_phoenix-sensor #wpcontent,
+body.toplevel_page_phoenix-sensor #wpbody,
+body.toplevel_page_phoenix-sensor #wpbody-content {
+    background-color: #0b1421 !important;
+    color: #e2e8f0;
+}
+body.toplevel_page_phoenix-sensor #wpfooter {
+    color: #64748b !important;
+}
+body.toplevel_page_phoenix-sensor .notice,
+body.toplevel_page_phoenix-sensor .updated,
+body.toplevel_page_phoenix-sensor .error {
+    background: #111c2e !important;
+    color: #e2e8f0 !important;
+    border-color: #1e293b !important;
+}
 
-    /* 1. GLOBAL ENVIRONMENT */
-    #wpwrap, #wpcontent, #wpbody, #wpbody-content, #wpfooter { background-color: var(--px-bg) !important; }
-    .px-vibe-wrap { color: var(--px-text) !important; padding: 20px; font-family: 'Inter', sans-serif; min-height: 100vh; background-color: var(--px-bg) !important; box-sizing: border-box; width: 100% !important; max-width: 100vw !important; overflow-x: hidden !important; }
+.px-vibe-wrap { margin: 20px 20px 20px 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #e2e8f0; }
+.px-header { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; background: #111c2e; padding: 20px 24px; border-radius: 12px; border: 1px solid #1e293b; margin-bottom: 20px; }
+.px-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
+.px-header-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
-    /* 2. PX HEADER & TITLE STACK [Restored] */
-    .px-header-main { display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 30px !important; width: 100% !important; gap: 20px !important; }
-    
-    .px-title-stack { display: flex !important; flex-direction: column !important; gap: 2px !important; }
-    .px-title-stack h1 { font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; letter-spacing: -0.02em !important; text-transform: uppercase !important; line-height: 1.1 !important; }
-    .px-version-tag { font-size: 10px !important; color: #3b82f6 !important; background: rgba(59, 130, 246, 0.15) !important; padding: 2px 8px !important; border-radius: 4px !important; margin-left: 10px !important; font-weight: 700 !important; vertical-align: middle !important; }
-    .px-subtitle-fix { margin: 0 !important; letter-spacing: 0.05em !important; font-size: 11px !important; font-weight: 800 !important; color: var(--px-blue) !important; text-transform: uppercase !important; }
+.px-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.8125rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.px-btn-primary { background: #2563eb; color: #ffffff !important; border-color: #3b82f6; }
+.px-btn-primary:hover { background: #1d4ed8; color: #ffffff !important; }
+.px-btn-secondary { background: #1e293b; color: #e2e8f0 !important; border-color: #334155; }
+.px-btn-secondary:hover { background: #334155; color: #ffffff !important; }
+.px-btn-danger { background: rgba(239, 68, 68, 0.12); color: #f87171 !important; border-color: rgba(239, 68, 68, 0.35); }
+.px-btn-danger:hover { background: rgba(239, 68, 68, 0.22); color: #fecaca !important; }
 
-    /* 3. BRANDING & ICONS [Strict Enforcement] */
-    .px-branding-right { display: flex !important; align-items: center !important; gap: 15px !important; margin-left: auto !important; }
-    .px-branding-motto { text-align: right !important; display: flex !important; flex-direction: column !important; gap: 2px !important; }
-    .px-motto-top { font-size: 10px !important; font-weight: 800 !important; color: var(--px-blue) !important; text-transform: uppercase !important; letter-spacing: 0.1em !important; line-height: 1 !important; }
-    .px-motto-bottom { font-size: 10px !important; font-weight: 800 !important; color: #64748b !important; text-transform: uppercase !important; line-height: 1 !important; }
-    .px-phoenix-logo { width: 45px !important; height: auto !important; display: block !important; }
+.px-sitrep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.px-card { background: #111c2e; border: 1px solid #1e293b; padding: 18px 20px; border-radius: 12px; }
+.px-card-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 6px; font-weight: 600; }
+.px-card-val { font-size: 1.75rem; font-weight: 800; color: #f8fafc; line-height: 1.15; }
+.px-card-sub { font-size: 0.78rem; color: #38bdf8; margin-top: 6px; }
 
-    /* The AI Icon Hammer: Forces 20x20 regardless of context */
-    .px-agent-row img, .px-agent-icon, .px-tbl-wrap img { 
-        width: 20px !important; 
-        height: 20px !important; 
-        min-width: 20px !important; 
-        max-width: 20px !important; 
-        border-radius: 4px !important; 
-        margin-right: 12px !important; 
-        object-fit: contain !important; 
-    }
+.px-intel-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.px-panel { background: #111c2e; border: 1px solid #1e293b; border-radius: 12px; padding: 16px 20px; }
+.px-panel-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #f8fafc; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.px-gap-list { list-style: none; margin: 0; padding: 0; }
+.px-gap-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid #1e293b; font-size: 0.8125rem; color: #cbd5e1; gap: 12px; }
+.px-gap-list li:first-child { border-top: none; padding-top: 0; }
 
-    /* 4. SR MODULES & STATS */
-    .px-sr-grid { display: grid !important; grid-template-columns: var(--px-grid-cols) !important; gap: 20px !important; width: 100% !important; margin: 0 0 30px 0 !important; }
-    .px-sr-card { background: var(--px-card) !important; padding: 20px !important; border-radius: 12px !important; border: 1px solid var(--px-border) !important; display: flex !important; flex-direction: column !important; position: relative !important; }
-    .px-sr-card-label { font-size: 11px !important; font-weight: 800 !important; color: #ffffff !important; text-transform: uppercase !important; border-bottom: 1px solid var(--px-border) !important; padding-bottom: 12px !important; margin-bottom: 15px !important; display: block !important; }
-    
-    .px-stat-percent { font-family: 'JetBrains Mono', monospace !important; font-size: 14px !important; font-weight: 800 !important; color: var(--px-blue) !important; margin-left: auto !important; }
-    .px-ratio-big-num { font-size: 42px !important; font-weight: 900 !important; color: var(--px-blue) !important; line-height: 1 !important; margin-bottom: 10px !important; display: block !important; }
+.px-filter-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; background: #111c2e; border: 1px solid #1e293b; padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; }
+.px-filter-group { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.px-select { background: #0b1421 !important; color: #e2e8f0 !important; border: 1px solid #334155 !important; border-radius: 6px !important; padding: 4px 10px !important; font-size: 0.8rem !important; height: 32px !important; }
 
-    /* 5. DATA TABLE & ZEBRA */
-    .px-tbl-container { width: 100% !important; overflow-x: auto !important; border-radius: 12px !important; border: 1px solid var(--px-border) !important; background: var(--px-card) !important; }
-    .px-tbl-wrap { width: 100% !important; border-collapse: collapse !important; min-width: 800px !important; }
-    .px-tbl-wrap td { padding: 14px 15px !important; font-size: 12px !important; border-bottom: 1px solid var(--px-border) !important; color: #cbd5e1 !important; vertical-align: middle !important; }
-    .px-tbl-wrap tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02) !important; }
+.px-table-wrap { background: #111c2e; border: 1px solid #1e293b; border-radius: 12px; overflow-x: auto; }
+.px-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8125rem; color: #cbd5e1; }
+.px-table th { background: #172338; padding: 12px 14px; font-weight: 600; color: #94a3b8; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.05em; white-space: nowrap; }
+.px-table td { padding: 11px 14px; border-top: 1px solid #1e293b; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e2e8f0; }
+.px-table td code { background: #0b1421; color: #93c5fd; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
+.px-table tr:hover td { background: rgba(30, 41, 59, 0.55); }
 
-    /* 6. BUTTON HARDENING */
-    .px-nav-container { display: flex !important; flex-wrap: wrap !important; gap: 15px !important; margin: 30px 0 20px 0 !important; justify-content: space-between !important; align-items: center !important; }
-    .px-nav-btn, .px-csv-link, .px-pagination-btn, .px-timeline-btn { background: #1e293b !important; color: #ffffff !important; border: 1px solid #334155 !important; padding: 10px 18px !important; border-radius: 8px !important; cursor: pointer !important; font-weight: 700 !important; font-size: 12px !important; transition: all 0.2s ease !important; text-decoration: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
-    
-    .px-sr-card .px-timeline-btn, .px-sr-card .px-nav-btn { margin-top: auto !important; width: 100% !important; background: rgba(59, 130, 246, 0.1) !important; border: 1px solid rgba(59, 130, 246, 0.2) !important; color: var(--px-blue) !important; padding: 12px !important; text-transform: uppercase !important; }
-
-    /* 7. RESPONSIVE MEDIA QUERIES */
-    @media (min-width: 768px) {
-        :root { --px-grid-cols: repeat(2, 1fr); }
-        .px-vibe-wrap { padding: 40px; }
-        .px-title-stack h1 { font-size: 26px !important; }
-    }
-    @media (min-width: 1100px) {
-        :root { --px-grid-cols: repeat(3, 1fr); }
-        .px-sr-card { min-height: 420px !important; }
-    }
-    @media (max-width: 600px) {
-        .px-header-main { gap: 10px !important; }
-        .px-branding-right { width: 100% !important; justify-content: flex-start !important; margin-left: 0 !important; }
-        .px-branding-motto { text-align: left !important; }
-    }
+.px-badge { display: inline-block; padding: 3px 8px; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.px-badge-ai { background: rgba(56, 189, 248, 0.16); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
+.px-badge-search { background: rgba(34, 197, 94, 0.16); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35); }
+.px-badge-human { background: rgba(148, 163, 184, 0.16); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.35); }
+.px-badge-friction { background: rgba(239, 68, 68, 0.16); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); }
+.px-badge-warn { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
 </style>
